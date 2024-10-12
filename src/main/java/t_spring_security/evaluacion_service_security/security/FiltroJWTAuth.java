@@ -33,13 +33,14 @@ public class FiltroJWTAuth {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
+                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (Exception e) {
                 System.out.println("Token inválido");
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-             {
+            if (jwtTokenUtil.validateToken(jwtToken, username)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         username, null, Collections.emptyList());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -47,6 +48,6 @@ public class FiltroJWTAuth {
             }
         }
 
-
+        filterChain.doFilter(request, response);
     }
 }

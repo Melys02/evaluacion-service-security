@@ -1,9 +1,11 @@
 package t_spring_security.evaluacion_service_security.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
+import java.util.function.Function;
 
 public class JwtTokenUtil {
     private final String SECRET_KEY = "t2vi2024";
@@ -17,5 +19,38 @@ public class JwtTokenUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3)) // Expira en 3 minutos
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+    // Obtener el nombre de usuario del token JWT
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    // Obtener el rol del token JWT
+    public String getRoleFromToken(String token) {
+        return (String) getAllClaimsFromToken(token).get("role");
+    }
+
+    // Validar token
+    public boolean validateToken(String token, String username) {
+        return getUsernameFromToken(token).equals(username) && !isTokenExpired(token);
+    }
+
+    // Verificar si el token ha expirado
+    private boolean isTokenExpired(String token) {
+        return getExpirationDateFromToken(token).before(new Date());
+    }
+
+    // Obtener la fecha de expiración del token
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 }

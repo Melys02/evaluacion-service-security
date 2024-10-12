@@ -48,8 +48,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // No usar sesiones
 
-        // Desactivar CSRF si es necesario
-        http.csrf(csrf -> csrf.disable()); // Desactivar CSRF para aplicaciones RESTful
+        http.csrf(csrf -> csrf.disable());
 
         return http.build();
     }

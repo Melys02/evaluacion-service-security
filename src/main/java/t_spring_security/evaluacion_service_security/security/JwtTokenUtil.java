@@ -10,7 +10,6 @@ import java.util.function.Function;
 public class JwtTokenUtil {
     private final String SECRET_KEY = "t2vi2024";
 
-    // Generar token JWT
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
@@ -20,17 +19,14 @@ public class JwtTokenUtil {
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
-    // Obtener el nombre de usuario del token JWT
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    // Obtener el rol del token JWT
     public String getRoleFromToken(String token) {
         return (String) getAllClaimsFromToken(token).get("role");
     }
 
-    // Validar token
     public boolean validateToken(String token, String username) {
         return getUsernameFromToken(token).equals(username) && !isTokenExpired(token);
     }

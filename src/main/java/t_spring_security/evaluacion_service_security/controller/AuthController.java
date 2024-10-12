@@ -31,7 +31,6 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getCodigo(), authRequest.getPassword()));
 
-        // Si la autenticación es exitosa, generamos el token JWT
         //final String token = jwtTokenUtil.generateToken(
         // authRequest.getCodigo(),
         // usuarioService.findByCodigo(authRequest.getCodigo());

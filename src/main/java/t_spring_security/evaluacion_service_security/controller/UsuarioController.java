@@ -1,14 +1,16 @@
 package t_spring_security.evaluacion_service_security.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import t_spring_security.evaluacion_service_security.dto.UsuarioRequest;
 import t_spring_security.evaluacion_service_security.model.Usuario;
 import t_spring_security.evaluacion_service_security.service.UsuarioService;
 
+@RequiredArgsConstructor
 public class UsuarioController
 {
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     // API para registrar un usuario con un rol
     @PostMapping("/registrar")
